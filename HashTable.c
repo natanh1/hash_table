@@ -16,7 +16,7 @@ struct Bucket
 
 typedef struct HashTable
 {
-	Bucket* data;
+	Bucket** data;
 	int size;
 } HashTable;
 
@@ -25,6 +25,11 @@ HashTable Constructor
 */
 HashTable* newHashTable(int size)
 {
+	if (size <= 0)
+	{
+		return NULL;
+	}
+
 	HashTable* hashTable = (HashTable*)malloc(sizeof(HashTable));
 
 	if (hashTable == NULL)
@@ -33,11 +38,11 @@ HashTable* newHashTable(int size)
 	}
 
 	hashTable->size = size;
-	hashTable->data = (Bucket*)malloc(sizeof(Bucket) * size);
+	hashTable->data = (Bucket**)malloc(sizeof(Bucket*) * size);
 
 	for (int i = 0; i < size; i++)
 	{
-		//*(hashTable->data + i) = NULL;
+		hashTable->data[i] = NULL;
 	}
 
 	return hashTable;
@@ -70,17 +75,49 @@ Bucket* newBucket(char* key, int value)
 */
 int hashing(char* key, int tableSize)
 {
-	int hash = 0;
+	int index = 0;
 
 	for (int i = 0; key[i] != '\0'; i++)
 	{
-		hash = (hash + key[i] * i) % tableSize;
+		index = (index + key[i] * i) % tableSize;
 	}
 
-	return hash;
+	return index;
+}
+
+void set(char* key, int value, HashTable* hashTable)
+{
+	int index = hashing(key, hashTable->size);
+	Bucket* curr = NULL;
+
+	if (hashTable->data[index] == NULL)
+	{
+		hashTable->data[index] = newBucket(key, value);
+	}
+	else
+	{
+		curr = hashTable->data[index];
+
+		while (curr->next != NULL)
+		{
+			curr = curr->next;
+		}
+
+		curr->next = newBucket(key, value);
+	}
+}
+
+int get(char* key)
+{
+	return 0;
 }
 
 int main(int argc, char** argv)
 {
+	HashTable* hashTable = newHashTable(5);
+	set("hello", 3, hashTable);
+
+
+	
 	return 0;
 }
