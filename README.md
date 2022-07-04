@@ -14,13 +14,13 @@ https://github.com/natanh1/hash_table/blob/main/HashTable.c
 
 ```c
 
-# create a new hash table
+# creates a new hash table
 HashTable* hashTable = newHashTable(size);
 
-# delete the hash table
+# deletes the hash table
 deleteHashTable(hashTable);
 
-# set new organ in the table - key must be a string and value must be an int
+# sets new organ in the table - key must be a string and value must be an int
 set("key", 100, hashTable);
 
 # returns the value
