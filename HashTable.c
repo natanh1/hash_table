@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 
 typedef struct Bucket Bucket;
@@ -107,16 +107,34 @@ void set(char* key, int value, HashTable* hashTable)
 	}
 }
 
-int get(char* key)
+int get(char* key, HashTable* hashTable)
 {
-	return 0;
+	int index = hashing(key, hashTable->size);
+	Bucket* curr = hashTable->data[index];
+
+	if (hashTable->data[index] == NULL)
+	{
+		return -1; // ?
+	}
+
+	while (curr != NULL)
+	{
+		if (strcmp(curr->key, key) == 0)
+		{
+			return curr->value;
+		}
+
+		curr = curr->next;
+	}
+	
+	return -1;
 }
 
 int main(int argc, char** argv)
 {
 	HashTable* hashTable = newHashTable(5);
 	set("hello", 3, hashTable);
-
+	printf("%d", get("hello", hashTable));
 
 	
 	return 0;
