@@ -48,7 +48,30 @@ HashTable* newHashTable(int size)
 	return hashTable;
 }
 
+void deleteHashTable(HashTable* hashTable)
+{
+	Bucket* curr = NULL;
+	Bucket* next = NULL;
 
+	for (int i = 0; i < hashTable->size; i++)
+	{
+		if (hashTable->data[i] != NULL)
+		{
+			curr = hashTable->data[i];
+			next = curr->next;
+
+			while (next != NULL)
+			{
+				free(curr);
+				curr = next;
+				next = next->next;
+			}
+		}
+		curr = NULL;
+	}
+
+	free(hashTable->data);
+}
 
 /*
 Bucket Constructor
@@ -85,6 +108,9 @@ int hashing(char* key, int tableSize)
 	return index;
 }
 
+/*
+this function adds an organ to the map
+*/
 void set(char* key, int value, HashTable* hashTable)
 {
 	int index = hashing(key, hashTable->size);
@@ -98,15 +124,24 @@ void set(char* key, int value, HashTable* hashTable)
 	{
 		curr = hashTable->data[index];
 
-		while (curr->next != NULL)
+		do
 		{
+			if (strcmp(curr->key, key) == 0)
+			{
+				curr->value = value;
+				return;
+			}
+
 			curr = curr->next;
-		}
+		} while (curr->next != NULL);
 
 		curr->next = newBucket(key, value);
 	}
 }
 
+/*
+this function gets the value of an organ by its key
+*/
 int get(char* key, HashTable* hashTable)
 {
 	int index = hashing(key, hashTable->size);
@@ -134,7 +169,14 @@ int main(int argc, char** argv)
 {
 	HashTable* hashTable = newHashTable(5);
 	set("hello", 3, hashTable);
-	printf("%d", get("hello", hashTable));
+	set("XD", 212, hashTable);
+	set("kend", 12, hashTable);
+	printf("%d\n", get("hello", hashTable));
+	printf("%d\n", get("XD", hashTable));
+	printf("%d\n", get("kend", hashTable));
+	set("kend", 32, hashTable);
+	printf("%d\n", get("kend", hashTable));
+	deleteHashTable(hashTable);
 
 	
 	return 0;
