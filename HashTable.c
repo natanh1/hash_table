@@ -156,8 +156,32 @@ int get(char* key, HashTable* hashTable)
 
 		curr = curr->next;
 	}
-	
+
 	return -1;
+}
+
+/*
+* the function prints all table's organs
+*/
+void printOrgans(HashTable* hashTable)
+{
+	if (hashTable == NULL)
+	{
+		return;
+	}
+
+	Bucket* curr = NULL;
+
+	for (int i = 0; i < hashTable->size; i++)
+	{
+		curr = hashTable->data[i];
+
+		while (curr != NULL)
+		{
+			printf("(%s, %d)\n", curr->key, curr->value);
+			curr = curr->next;
+		}
+	}
 }
 
 int main(int argc, char** argv)
@@ -171,8 +195,12 @@ int main(int argc, char** argv)
 	printf("%d\n", get("kend", hashTable));
 	set("kend", 32, hashTable);
 	printf("%d\n", get("kend", hashTable));
+
+	printf("\n");
+	printOrgans(hashTable);
+
 	deleteHashTable(hashTable);
 
-	
+
 	return 0;
 }
