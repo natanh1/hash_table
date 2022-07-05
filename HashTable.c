@@ -147,11 +147,6 @@ int get(char* key, HashTable* hashTable)
 	int index = hashing(key, hashTable->size);
 	Bucket* curr = hashTable->data[index];
 
-	if (hashTable->data[index] == NULL)
-	{
-		return -1; // ?
-	}
-
 	while (curr != NULL)
 	{
 		if (strcmp(curr->key, key) == 0)
